@@ -24,6 +24,8 @@
     "body-parser": "^1.19.1",
     "bootstrap": "^5.1.3",
     "express": "^4.17.2",
+    "mongodb": "^4.3.1",
+    "mongoose": "^6.1.8",
     "rxjs": "~7.4.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
@@ -42,5 +44,18 @@
     "karma-jasmine-html-reporter": "~1.7.0",
     "nodemon": "^2.0.15",
     "typescript": "~4.4.3"
-  }
+  },
+  "description": "This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.0.3.",
+  "main": "karma.conf.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/niteesh5842/Tasks--Application.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/niteesh5842/Tasks--Application/issues"
+  },
+  "homepage": "https://github.com/niteesh5842/Tasks--Application#readme"
 }

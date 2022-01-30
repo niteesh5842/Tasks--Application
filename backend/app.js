@@ -1,7 +1,22 @@
 const express = require("express");
 const bodyparser = require("body-parser");
+const mongoose = require("mongoose");
+
+const postRoutes = require("./routes/posts");
 
 const app = express();
+
+mongoose
+  .connect(
+    "mongodb+srv://niteesh_332:niteesh332@cluster0.srals.mongodb.net/angular-node?retryWrites=true&w=majority",
+    { useNewUrlParser: true, useUnifiedTopology: true }
+  )
+  .then(() => {
+    console.log("Connected to database!!");
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: false }));
@@ -14,36 +29,11 @@ app.use((req, res, next) => {
   );
   res.setHeader(
     "Access-Control-Allow-methods",
-    "GET,POST,PATCH,DELETE,OPTIONS"
+    "GET,POST,PATCH,PUT,DELETE,OPTIONS"
   );
   next();
 });
 
-app.post("/posts", (req, res, next) => {
-  const post = req.body;
-  console.log(post);
-  res.status(201).json({
-    message: "Post added successfully!!",
-  });
-});
-
-app.get("/posts", (req, res, next) => {
-  const posts = [
-    {
-      id: "hdhdjhdkjkjkd979799",
-      title: "First",
-      content: "this is coming from first",
-    },
-    {
-      id: "hdhdjhdkjkjkd979799",
-      title: "secondt",
-      content: "this is coming from secondt",
-    },
-  ];
-  res.status(200).json({
-    message: "posts fetched",
-    posts: posts,
-  });
-});
+app.use("/posts", postRoutes);
 
 module.exports = app;
