@@ -2,9 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
-
-import { Post } from './post.model';
 import { Router } from '@angular/router';
+
+import { environment } from '../../environments/environment';
+import { Post } from './post.model';
+
+const BACKEND_URL = environment.apiUrl + '/posts';
 
 @Injectable({ providedIn: 'root' })
 export class PostsService {
@@ -17,7 +20,7 @@ export class PostsService {
     const queryParams = `?pagesize=${postPerPage}&page=${currentPage}`;
     this.http
       .get<{ message: string; posts: any; maxPosts: number }>(
-        'http://localhost:3000/posts' + queryParams
+        BACKEND_URL + queryParams
       )
       .pipe(
         map((postData) => {
@@ -36,7 +39,7 @@ export class PostsService {
         })
       )
       .subscribe((transformedPostsData) => {
-        console.log(transformedPostsData);
+        // console.log(transformedPostsData);
 
         this.posts = transformedPostsData.posts;
         this.postsUpdated.next({
@@ -57,7 +60,7 @@ export class PostsService {
       content: string;
       imagePath: string;
       creator: string;
-    }>(`http://localhost:3000/posts/${id}`);
+    }>(`${BACKEND_URL}/${id}`);
   }
 
   // addPost(title: string, content: string) {
@@ -84,10 +87,7 @@ export class PostsService {
     postData.append('image', image, title);
     //adding to server
     this.http
-      .post<{ message: string; post: Post }>(
-        'http://localhost:3000/posts',
-        postData
-      )
+      .post<{ message: string; post: Post }>(BACKEND_URL, postData)
       .subscribe((responseData) => {
         // const post: Post = {
         //   id: responseData.post.id,
@@ -119,26 +119,24 @@ export class PostsService {
       };
     }
 
-    this.http
-      .put(`http://localhost:3000/posts/${id}`, postData)
-      .subscribe((response) => {
-        // //updating locally
-        // const updatedPosts = [...this.posts];
-        // const oldPostIndex = updatedPosts.findIndex((p) => p.id === id);
-        // const post: Post = {
-        //   id: id,
-        //   title: title,
-        //   content: content,
-        //   imagePath: '',
-        // };
-        // updatedPosts[oldPostIndex] = post;
-        // this.posts = updatedPosts;
-        // this.postsUpdated.next([...this.posts]);
-        this.router.navigate(['/']);
-      });
+    this.http.put(`${BACKEND_URL}/${id}`, postData).subscribe((response) => {
+      // //updating locally
+      // const updatedPosts = [...this.posts];
+      // const oldPostIndex = updatedPosts.findIndex((p) => p.id === id);
+      // const post: Post = {
+      //   id: id,
+      //   title: title,
+      //   content: content,
+      //   imagePath: '',
+      // };
+      // updatedPosts[oldPostIndex] = post;
+      // this.posts = updatedPosts;
+      // this.postsUpdated.next([...this.posts]);
+      this.router.navigate(['/']);
+    });
   }
 
   deletePost(postId: string) {
-    return this.http.delete(`http://localhost:3000/posts/${postId}`);
+    return this.http.delete(`${BACKEND_URL}/${postId}`);
   }
 }
